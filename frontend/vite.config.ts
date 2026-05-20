@@ -8,6 +8,7 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 4200,
     strictPort: true,
+    allowedHosts: ['saas-api-1-h0y5.onrender.com'],
     proxy: {
       '/api': {
         target: process.env.API_URL || 'http://backend:8000/api',
