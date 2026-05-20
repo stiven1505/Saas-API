@@ -5,6 +5,7 @@ on:
     branches: [main, develop]
     paths:
       - "backend/**"
+
   pull_request:
     branches: [main, develop]
     paths:
@@ -18,21 +19,23 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: saas_test_db
+        ports:
+          - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U postgres"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          - 5432:5432
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -43,20 +46,29 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-asyncio
 
-      - name: Run tests
-        working-directory: backend
+      - name: Run Alembic migrations
+        working-directory: ./backend
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/saas_test_db
-        run: pytest
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/saas_test_db
+        run: |
+          alembic upgrade head
+
+      - name: Run tests
+        working-directory: ./backend
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/saas_test_db
+        run: |
+          pytest
 
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -69,4 +81,5 @@ jobs:
 
       - name: Lint with flake8
         working-directory: ./backend
-        run: flake8 app --count --select=E9,F63,F7,F82 --show-source --statistics
+        run: |
+          flake8 app --count --select=E9,F63,F7,F82 --show-source --statistics
