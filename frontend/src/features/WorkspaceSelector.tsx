@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Card, CardContent, CardActions, Button, Grid, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 import api from '../api/axios';
 import { useWorkspaceStore } from '../store/workspaceStore';
+
+interface Workspace {
+  id: string;
+  name: string;
+  description: string;
+  role: 'ADMIN' | 'EDITOR' | 'READER';
+}
 
 export default function WorkspaceSelector() {
   const [loading, setLoading] = useState(true);
@@ -16,7 +23,7 @@ export default function WorkspaceSelector() {
     try {
       const response = await api.get('/workspaces');
       setWorkspaces(response.data);
-    } catch (err) {
+    } catch (err :unknown) {
       console.error('Failed to fetch workspaces', err);
     } finally {
       setLoading(false);
@@ -32,7 +39,7 @@ export default function WorkspaceSelector() {
 
 
         setWorkspaces(response.data);
-      } catch (err) {
+      } catch (err :unknown) {
         console.error("ERROR FETCHING WORKSPACES", err);
       } finally {
         setLoading(false);
@@ -42,7 +49,7 @@ export default function WorkspaceSelector() {
     fetchWorkspaces();
   }, [setWorkspaces]);
 
-  const handleSelect = (workspace: any) => {
+  const handleSelect = (workspace: Workspace) => {
     setCurrentWorkspace(workspace);
     navigate('/');
   };
@@ -55,7 +62,7 @@ export default function WorkspaceSelector() {
       setNewWorkspaceName('');
       setNewWorkspaceDesc('');
       await fetchWorkspaces(); // refresh list
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to create workspace', err);
     }
   };
@@ -74,9 +81,9 @@ export default function WorkspaceSelector() {
       </Box>
       
       <Grid container spacing={3}>
-        {workspaces.map((ws: any) => {
+        {workspaces.map((ws: Workspace) => {
           return (
-            <Grid item xs={12} sm={6} md={4} key={ws.id}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={ws.id}>
               <Card>
                 <CardContent>
                   <Typography variant="h6">{ws.name}</Typography>
@@ -97,7 +104,7 @@ export default function WorkspaceSelector() {
         })}
         {
         workspaces.length === 0 && (
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Typography>You are not a member of any workspaces. Create one to get started!</Typography>
           </Grid>
         )}
