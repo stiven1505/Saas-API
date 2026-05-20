@@ -52,7 +52,7 @@ export default function Dashboard() {
         const response = await api.get('/projects');
         setProjects(response.data);
 
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Failed to fetch projects', err);
       } finally {
         setLoading(false);
@@ -80,7 +80,7 @@ export default function Dashboard() {
       const response = await api.get('/projects');
       setProjects(response.data);
 
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to create project', err);
     }
   };
@@ -113,7 +113,7 @@ export default function Dashboard() {
 
       {/* PROJECT LIST */}
       <Grid container spacing={3}>
-        {projects.map((project: any) => (
+        {projects.map((project: Project) => (
           <Grid item xs={12} md={6} key={project.id}>
             <Card>
               <CardContent>

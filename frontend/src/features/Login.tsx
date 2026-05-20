@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, TextField, Typography, Paper, Alert } from '@mui/material';
 import api from '../api/axios';
 import { useAuthStore } from '../store/authStore';
+import axios from 'axios';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -21,9 +22,13 @@ export default function Login() {
 
       setToken(response.data.access_token);
       navigate('/workspaces');
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Login failed');
-    }
+    } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          setError(err.response?.data?.detail || 'Login failed');
+        } else {
+          setError('Login failed');
+        }
+      }
   };
 
   return (
