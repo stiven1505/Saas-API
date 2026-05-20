@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -114,7 +114,7 @@ export default function Dashboard() {
       {/* PROJECT LIST */}
       <Grid container spacing={3}>
         {projects.map((project: Project) => (
-          <Grid item xs={12} md={6} key={project.id}>
+          <Grid size={{ xs: 12, md: 6 }} key={project.id}>
             <Card>
               <CardContent>
 
@@ -139,7 +139,7 @@ export default function Dashboard() {
         ))}
 
         {projects.length === 0 && (
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Typography variant="body1" color="text.secondary">
               No projects found in this workspace.
             </Typography>
