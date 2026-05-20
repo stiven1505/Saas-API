@@ -44,7 +44,7 @@ jobs:
           pip install pytest pytest-asyncio
 
       - name: Run tests
-        working-directory: ./backend
+        working-directory: backend
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/saas_test_db
         run: pytest
