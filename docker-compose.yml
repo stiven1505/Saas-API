@@ -32,6 +32,7 @@ services:
       API_HOST: 0.0.0.0
       API_PORT: 8000
       DEBUG: "false"
+      PYTHONPATH: /app
     ports:
       - "8000:8000"
     depends_on:

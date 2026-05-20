@@ -19,8 +19,16 @@ import api from '../api/axios';
 import { useWorkspaceStore } from '../store/workspaceStore';
 import { useNavigate } from 'react-router-dom';
 
+// Define the Project type
+interface Project {
+  id: string;
+  name: string;
+  description?: string;
+  status: 'ACTIVE' | 'COMPLETED' | 'ON_HOLD' | 'CANCELLED';
+}
+
 export default function Dashboard() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
   const { currentWorkspace } = useWorkspaceStore();
