@@ -49,6 +49,7 @@ jobs:
       - name: Run Alembic migrations
         working-directory: ./backend
         env:
+          PYTHONPATH: .
           DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/saas_test_db
         run: |
           alembic upgrade head
@@ -56,6 +57,7 @@ jobs:
       - name: Run tests
         working-directory: ./backend
         env:
+          PYTHONPATH: .
           DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/saas_test_db
         run: |
           pytest
