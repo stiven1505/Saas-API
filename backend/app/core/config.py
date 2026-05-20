@@ -39,7 +39,7 @@ class Settings(BaseSettings):
 
     # ── CORS ──────────────────────────────────────────────────────────────
     CORS_ORIGINS: List[str] = Field(
-        default=["http://localhost:4200", "http://localhost:3000"],
+        default=["http://localhost:4200", "http://localhost:3000", "https://saas-api-1-h0y5.onrender.com"],
         description="Allowed CORS origins",
     )
 
