@@ -31,6 +31,7 @@ async def seed_db():
 
     async with async_session() as session:
         # Check if user already exists
+        print("SESSION STARTED")
         result = await session.execute(select(UserModel).where(UserModel.email == "test@example.com"))
         user = result.scalar_one_or_none()
 
@@ -146,10 +147,18 @@ async def seed_db():
                 created_by=user.id
             )
             session.add(p_mega)
+        print("COMMITTING...")
         await session.commit()
         print("Database seeded successfully!")
 
     await engine.dispose()
 
 if __name__ == "__main__":
-    asyncio.run(seed_db())
+    try:
+        print("STARTING DATABASE SEED...")
+        asyncio.run(seed_db())
+        print("SEED FINISHED SUCCESSFULLY")
+    except Exception as e:
+        print("SEED FAILED:")
+        print(e)
+        raise e
