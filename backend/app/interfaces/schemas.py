@@ -13,6 +13,11 @@ class LoginRequest(BaseModel):
     email: EmailStr
     password: str
 
+class TokenRequest(BaseModel):
+    """Token exchange request schema."""
+
+    workspace_id: str
+
 
 class TokenResponse(BaseModel):
     """Token response schema."""
