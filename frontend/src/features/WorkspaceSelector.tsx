@@ -49,9 +49,24 @@ export default function WorkspaceSelector() {
     fetchWorkspaces();
   }, [setWorkspaces]);
 
-  const handleSelect = (workspace: Workspace) => {
-    setCurrentWorkspace(workspace);
-    navigate('/');
+  const handleSelect = async (workspace: Workspace) => {
+    try {
+      // 1. Hacer POST a /auth/token con el workspace_id
+      const response = await api.post('/auth/token', {
+        workspace_id: workspace.id,
+      });
+      
+      // 2. Guardar el nuevo token en localStorage
+      localStorage.setItem('token', response.data.access_token);
+      
+      // 3. Actualizar el workspace en el store
+      setCurrentWorkspace(workspace);
+      
+      // 4. Navegar al dashboard
+      navigate('/');
+    } catch (err: unknown) {
+      console.error('Failed to select workspace', err);
+    }
   };
 
   const handleCreate = async () => {
